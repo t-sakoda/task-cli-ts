@@ -3,9 +3,13 @@
   "bin": {
     "task-cli": "dist/index.js"
   },
+  "scripts": {
+    "test": "vitest"
+  },
   "devDependencies": {
     "@types/node": "22.10.2",
     "ts-node": "10.9.2",
-    "typescript": "5.7.2"
+    "typescript": "5.7.2",
+    "vitest": "2.1.8"
   }
 }
