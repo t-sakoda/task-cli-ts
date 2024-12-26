@@ -1,4 +1,8 @@
 {
+  "name": "task-cli",
+  "bin": {
+    "task-cli": "dist/index.js"
+  },
   "devDependencies": {
     "@types/node": "22.10.2",
     "ts-node": "10.9.2",
