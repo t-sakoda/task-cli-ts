@@ -6,7 +6,7 @@ const args = process.argv.slice(2)
 
 const taskController = new TaskController()
 try {
-  taskController.run(args)
+  taskController.run(...args)
   process.exit(0)
 } catch (error: unknown) {
   if (error instanceof Error) {
