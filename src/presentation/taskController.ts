@@ -1,5 +1,5 @@
-import { TaskRepository } from "../infra/taskRepository"
-import { AddTaskUseCase } from "../useCase/addTaskUseCase"
+import {TaskRepository} from '../infra/taskRepository'
+import {AddTaskUseCase} from '../useCase/addTaskUseCase'
 
 export class TaskController {
   run(...args: string[]) {

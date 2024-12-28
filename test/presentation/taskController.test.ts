@@ -1,11 +1,11 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { TaskController } from '../../src/presentation/taskController'
-import { AddTaskUseCase } from '../../src/useCase/addTaskUseCase'
+import {describe, expect, it, vi} from 'vitest'
+import {TaskController} from '../../src/presentation/taskController'
+import {AddTaskUseCase} from '../../src/useCase/addTaskUseCase'
 
 vi.mock(import('../../src/useCase/addTaskUseCase'), () => {
   const AddTaskUseCase = vi.fn()
   AddTaskUseCase.prototype.run = vi.fn()
-  return { AddTaskUseCase }
+  return {AddTaskUseCase}
 })
 
 describe('TaskController', () => {
