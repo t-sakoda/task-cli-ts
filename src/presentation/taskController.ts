@@ -1,14 +1,20 @@
+import { TaskRepository } from "../infra/taskRepository"
+import { AddTaskUseCase } from "../useCase/addTaskUseCase"
+
 export class TaskController {
-  run(args: string[]) {
+  run(...args: string[]) {
     if (args.length === 0) {
       console.error('No arguments provided')
-      process.exit(1)
+      return
     }
 
+    const taskRepository = new TaskRepository()
     switch (args[0]) {
-      case 'add':
-        console.log('Adding...')
+      case 'add': {
+        const useCase = new AddTaskUseCase({taskRepository})
+        useCase.run(args[1])
         break
+      }
       case 'update':
         console.log('Updating...')
         break
@@ -43,9 +49,7 @@ export class TaskController {
       }
       default:
         console.error('Invalid command')
-        process.exit(1)
+        return
     }
-
-    process.exit(0)
   }
 }
