@@ -8,7 +8,7 @@ import {Task} from '../domain/task'
 const TASKS_JSON_FILE = 'tasks.json'
 
 export class TaskRepository implements ITaskRepository {
-  add(description: string): void {
+  insert(task: Task): void {
     let tasks: Task[] = []
     try {
       const file = fs.readFileSync(TASKS_JSON_FILE)
@@ -16,8 +16,7 @@ export class TaskRepository implements ITaskRepository {
     } catch (error: unknown) {
       console.log('No JSON file found. Creating a new one.')
     }
-    const newTask = Task.create(description)
-    tasks.push(newTask)
+    tasks.push(task)
     try {
       fs.writeFileSync(TASKS_JSON_FILE, JSON.stringify(tasks))
     } catch (error: unknown) {
@@ -25,28 +24,16 @@ export class TaskRepository implements ITaskRepository {
       throw new Error(TaskRepositoryErrorCode.FILE_WRITE_ERROR)
     }
   }
-  update(id: string, description: string): void {
+  update(task: Task): void {
     throw new Error('Method not implemented.')
   }
-  delete(id: string): void {
+  delete(task: Task): void {
     throw new Error('Method not implemented.')
   }
-  markInProgress(id: string): void {
+  list(): Task[]{
     throw new Error('Method not implemented.')
   }
-  markDone(id: string): void {
-    throw new Error('Method not implemented.')
-  }
-  listAll(): void {
-    throw new Error('Method not implemented.')
-  }
-  listDone(): void {
-    throw new Error('Method not implemented.')
-  }
-  listTodo(): void {
-    throw new Error('Method not implemented.')
-  }
-  listInProgress(): void {
+  find(id: string): Task | undefined {
     throw new Error('Method not implemented.')
   }
 }

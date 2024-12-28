@@ -1,3 +1,4 @@
+import { Task } from '../domain/task'
 import type {ITaskRepository} from '../domain/taskRepository'
 
 export interface AddTaskUseCaseProps {
@@ -15,6 +16,7 @@ export class AddTaskUseCase {
     if (!description) {
       throw new Error('No task name provided')
     }
-    this.taskRepository.add(description)
+    const task = Task.create(description)
+    this.taskRepository.insert(task)
   }
 }
