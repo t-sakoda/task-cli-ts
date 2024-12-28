@@ -4,6 +4,7 @@
     "task-cli": "dist/index.js"
   },
   "scripts": {
+    "build": "tsc src/index.ts --outDir dist",
     "test": "vitest"
   },
   "devDependencies": {
