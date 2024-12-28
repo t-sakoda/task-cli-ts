@@ -25,16 +25,16 @@ export class TaskRepository implements ITaskRepository {
       throw new Error(TaskRepositoryErrorCode.FILE_WRITE_ERROR)
     }
   }
-  update(taskId: string, taskName: string): void {
+  update(id: string, description: string): void {
     throw new Error('Method not implemented.')
   }
-  delete(taskId: string): void {
+  delete(id: string): void {
     throw new Error('Method not implemented.')
   }
-  markInProgress(taskId: string): void {
+  markInProgress(id: string): void {
     throw new Error('Method not implemented.')
   }
-  markDone(taskId: string): void {
+  markDone(id: string): void {
     throw new Error('Method not implemented.')
   }
   listAll(): void {

@@ -12,9 +12,9 @@ describe('TaskController', () => {
   describe('add', () => {
     it('calls AddTaskUseCase.run with the correct task name', () => {
       const taskController = new TaskController()
-      const taskName = 'Do the laundry'
-      taskController.run('add', taskName)
-      expect(AddTaskUseCase.prototype.run).toHaveBeenCalledWith(taskName)
+      const description = 'Do the laundry'
+      taskController.run('add', description)
+      expect(AddTaskUseCase.prototype.run).toHaveBeenCalledWith(description)
     })
   })
 })

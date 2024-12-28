@@ -18,8 +18,8 @@ describe('TaskRepository.add', () => {
     })
     it('creates a JSON file', () => {
       const taskRepository = new TaskRepository()
-      const taskName = 'Do the laundry'
-      taskRepository.add(taskName)
+      const description = 'Do the laundry'
+      taskRepository.add(description)
       expect(mockWriteFileSync).toHaveBeenCalledWith(
         'tasks.json',
         expect.any(String),
@@ -33,8 +33,8 @@ describe('TaskRepository.add', () => {
     })
     it('appends a new task to the JSON file', () => {
       const taskRepository = new TaskRepository()
-      const taskName = 'Do the laundry'
-      taskRepository.add(taskName)
+      const description = 'Do the laundry'
+      taskRepository.add(description)
       expect(mockWriteFileSync).toHaveBeenCalledWith(
         'tasks.json',
         expect.any(String),

@@ -11,10 +11,10 @@ export class AddTaskUseCase {
     this.taskRepository = props.taskRepository
   }
 
-  run(taskName: string) {
-    if (!taskName) {
+  run(description: string) {
+    if (!description) {
       throw new Error('No task name provided')
     }
-    this.taskRepository.add(taskName)
+    this.taskRepository.add(description)
   }
 }

@@ -13,9 +13,9 @@ describe('AddTaskUseCase', () => {
     it('calls TaskRepository.add with the correct task name', () => {
       const taskRepository = new TaskRepository()
       const useCase = new AddTaskUseCase({taskRepository})
-      const taskName = 'Do the laundry'
-      useCase.run(taskName)
-      expect(TaskRepository.prototype.add).toHaveBeenCalledWith(taskName)
+      const description = 'Do the laundry'
+      useCase.run(description)
+      expect(TaskRepository.prototype.add).toHaveBeenCalledWith(description)
     })
   })
 
