@@ -23,4 +23,19 @@ describe('TaskRepository.add', () => {
       expect(mockWriteFileSync).toHaveBeenCalledWith('tasks.json', expect.any(String))
     })
   })
+
+  describe('Given an existing JSON file', () => {
+    beforeEach(() => {
+      mockReadFileSync.mockReturnValue('[]')
+    })
+    it('appends a new task to the JSON file', () => {
+      const taskRepository = new TaskRepository()
+      const taskName = 'Do the laundry'
+      taskRepository.add(taskName)
+      expect(mockWriteFileSync).toHaveBeenCalledWith(
+        'tasks.json',
+        expect.any(String),
+      )
+    })
+  })
 })
