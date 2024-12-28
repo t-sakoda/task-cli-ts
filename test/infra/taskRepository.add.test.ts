@@ -1,0 +1,26 @@
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
+import { readFileSync, writeFileSync } from 'node:fs'
+import { TaskRepository } from '../../src/infra/taskRepository'
+vi.mock('node:fs')
+const mockReadFileSync = vi.mocked(readFileSync)
+const mockWriteFileSync = vi.mocked(writeFileSync)
+
+describe('TaskRepository.add', () => {
+  afterEach(() => {
+    vi.resetAllMocks()
+  })
+
+  describe('Given no JSON file', () => {
+    beforeEach(() => {
+      mockReadFileSync.mockImplementation(() => {
+        throw new Error('No JSON file found')
+      })
+    })
+    it('creates a JSON file', () => {
+      const taskRepository = new TaskRepository()
+      const taskName = 'Do the laundry'
+      taskRepository.add(taskName)
+      expect(mockWriteFileSync).toHaveBeenCalledWith('tasks.json', expect.any(String))
+    })
+  })
+})
