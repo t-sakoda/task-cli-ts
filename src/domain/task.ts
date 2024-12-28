@@ -1,11 +1,11 @@
-import { randomUUID } from "node:crypto"
+import {randomUUID} from 'node:crypto'
 
 export const TaskStatus = {
   TODO: 'todo',
   IN_PROGRESS: 'in-progress',
   DONE: 'done',
 } as const
-export type TaskStatus = typeof TaskStatus[keyof typeof TaskStatus]
+export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
 
 export interface Task {
   id: string
@@ -23,5 +23,5 @@ export const Task = {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
-  }
+  },
 }

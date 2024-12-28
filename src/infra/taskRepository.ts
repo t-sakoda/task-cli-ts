@@ -1,6 +1,9 @@
 import * as fs from 'node:fs'
-import {TaskRepositoryErrorCode, type ITaskRepository} from '../domain/taskRepository'
-import { Task } from '../domain/task'
+import {
+  TaskRepositoryErrorCode,
+  type ITaskRepository,
+} from '../domain/taskRepository'
+import {Task} from '../domain/task'
 
 const TASKS_JSON_FILE = 'tasks.json'
 

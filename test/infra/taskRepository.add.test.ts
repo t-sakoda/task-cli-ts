@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
-import { readFileSync, writeFileSync } from 'node:fs'
-import { TaskRepository } from '../../src/infra/taskRepository'
+import {readFileSync, writeFileSync} from 'node:fs'
+import {TaskRepository} from '../../src/infra/taskRepository'
 vi.mock('node:fs')
 const mockReadFileSync = vi.mocked(readFileSync)
 const mockWriteFileSync = vi.mocked(writeFileSync)
@@ -20,7 +20,10 @@ describe('TaskRepository.add', () => {
       const taskRepository = new TaskRepository()
       const taskName = 'Do the laundry'
       taskRepository.add(taskName)
-      expect(mockWriteFileSync).toHaveBeenCalledWith('tasks.json', expect.any(String))
+      expect(mockWriteFileSync).toHaveBeenCalledWith(
+        'tasks.json',
+        expect.any(String),
+      )
     })
   })
 

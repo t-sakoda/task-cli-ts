@@ -2,7 +2,8 @@ export const TaskRepositoryErrorCode = {
   FILE_NOT_FOUND: 'FileNotFound',
   FILE_WRITE_ERROR: 'FileWriteError',
 } as const
-export type TaskRepositoryErrorCode = typeof TaskRepositoryErrorCode[keyof typeof TaskRepositoryErrorCode]
+export type TaskRepositoryErrorCode =
+  (typeof TaskRepositoryErrorCode)[keyof typeof TaskRepositoryErrorCode]
 
 export interface ITaskRepository {
   add(taskName: string): void
