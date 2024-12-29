@@ -2,15 +2,16 @@ import {describe, expect, it, vi} from 'vitest'
 import {TaskController} from '../../src/presentation/taskController'
 import {AddTaskUseCase} from '../../src/useCase/addTaskUseCase'
 import {UpdateTaskUseCase} from '../../src/useCase/updateTaskUseCase'
+import { DeleteTaskUseCase } from '../../src/useCase/deleteTaskUseCase'
 
-vi.mock(import('../../src/useCase/addTaskUseCase'), () => {
-  const AddTaskUseCase = vi.fn()
-  AddTaskUseCase.prototype.run = vi.fn()
-  return {AddTaskUseCase}
-})
+vi.mock('../../src/useCase/addTaskUseCase')
+const mockAddTaskUseCaseRun = vi.mocked(AddTaskUseCase.prototype.run)
 
 vi.mock('../../src/useCase/updateTaskUseCase')
 const mockUpdateTaskUseCaseRun = vi.mocked(UpdateTaskUseCase.prototype.run)
+
+vi.mock('../../src/useCase/deleteTaskUseCase')
+const mockDeleteTaskUseCaseRun = vi.mocked(DeleteTaskUseCase.prototype.run)
 
 describe('TaskController', () => {
   describe('add', () => {
@@ -18,7 +19,7 @@ describe('TaskController', () => {
       const taskController = new TaskController()
       const description = 'Do the laundry'
       taskController.run('add', description)
-      expect(AddTaskUseCase.prototype.run).toHaveBeenCalledWith(description)
+      expect(mockAddTaskUseCaseRun).toHaveBeenCalledWith(description)
     })
   })
 
@@ -29,6 +30,15 @@ describe('TaskController', () => {
       const description = 'Do the laundry'
       taskController.run('update', id, description)
       expect(mockUpdateTaskUseCaseRun).toHaveBeenCalledWith(id, description)
+    })
+  })
+
+  describe('delete', () => {
+    it('calls DeleteTaskUseCase.run with the correct task id', () => {
+      const taskController = new TaskController()
+      const id = '1'
+      taskController.run('delete', id)
+      expect(mockDeleteTaskUseCaseRun).toHaveBeenCalledWith(id)
     })
   })
 })

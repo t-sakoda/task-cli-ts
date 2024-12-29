@@ -1,5 +1,6 @@
 import {TaskRepository} from '../infra/taskRepository'
 import {AddTaskUseCase} from '../useCase/addTaskUseCase'
+import { DeleteTaskUseCase } from '../useCase/deleteTaskUseCase'
 import {
   UpdateTaskUseCase,
   UpdateTaskUseCaseErrorCode,
@@ -42,9 +43,16 @@ export class TaskController {
         }
         break
       }
-      case 'delete':
-        console.log('Deleting...')
+      case 'delete': {
+        const [id] = args.slice(1)
+        const useCase = new DeleteTaskUseCase({taskRepository})
+        try {
+          useCase.run(id)
+        } catch (error: unknown) {
+          console.error('Internal error')
+        }
         break
+      }
       case 'mark-in-progress':
         console.log('Marking as in progress...')
         break
