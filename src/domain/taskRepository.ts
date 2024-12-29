@@ -3,6 +3,8 @@ import type {Task} from './task'
 export const TaskRepositoryErrorCode = {
   FILE_NOT_FOUND: 'FileNotFound',
   FILE_WRITE_ERROR: 'FileWriteError',
+  TASK_NOT_FOUND: 'TaskNotFound',
+  INTERNAL_ERROR: 'InternalError',
 } as const
 export type TaskRepositoryErrorCode =
   (typeof TaskRepositoryErrorCode)[keyof typeof TaskRepositoryErrorCode]
