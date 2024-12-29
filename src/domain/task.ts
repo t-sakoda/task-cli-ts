@@ -1,5 +1,10 @@
 import {randomUUID} from 'node:crypto'
 
+export const TaskErrorCode = {
+  INVALID_PROPERTIES: 'InvalidTaskProperties',
+} as const
+export type TaskErrorCode = (typeof TaskErrorCode)[keyof typeof TaskErrorCode]
+
 export const TaskStatus = {
   TODO: 'todo',
   IN_PROGRESS: 'in-progress',
@@ -42,6 +47,20 @@ export class Task {
   }
 
   static build(props: TaskProps): Task {
+    if (
+      !props.id ||
+      typeof props.id !== 'string' ||
+      !props.description ||
+      typeof props.description !== 'string' ||
+      !props.status ||
+      !Object.values(TaskStatus).includes(props.status) ||
+      !props.createdAt ||
+      typeof props.createdAt !== 'string' ||
+      !props.updatedAt ||
+      typeof props.updatedAt !== 'string'
+    ) {
+      throw new Error(TaskErrorCode.INVALID_PROPERTIES)
+    }
     return new Task(props)
   }
 

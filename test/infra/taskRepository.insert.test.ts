@@ -28,7 +28,7 @@ describe('TaskRepository.add', () => {
       taskRepository.insert(task)
       expect(mockWriteFileSync).toHaveBeenCalledWith(
         'tasks.json',
-        JSON.stringify([task]),
+        JSON.stringify([task], null, 2),
       )
     })
   })
@@ -60,7 +60,7 @@ describe('TaskRepository.add', () => {
       taskRepository.insert(task)
       expect(mockWriteFileSync).toHaveBeenCalledWith(
         'tasks.json',
-        JSON.stringify([task]),
+        JSON.stringify([task], null, 2),
       )
     })
   })

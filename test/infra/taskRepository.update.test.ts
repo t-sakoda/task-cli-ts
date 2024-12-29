@@ -31,15 +31,19 @@ describe('TaskRepository.update', () => {
       taskRepository.update(task)
       expect(mockWriteFileSync).toHaveBeenCalledWith(
         'tasks.json',
-        JSON.stringify([
-          {
-            id: task.id,
-            description: 'updated task',
-            status: TaskStatus.TODO,
-            createdAt: new Date('2025-01-01T00:00:00.000Z').toISOString(),
-            updatedAt: new Date('2025-01-01T00:00:01.000Z').toISOString(),
-          },
-        ]),
+        JSON.stringify(
+          [
+            {
+              id: task.id,
+              description: 'updated task',
+              status: TaskStatus.TODO,
+              createdAt: new Date('2025-01-01T00:00:00.000Z').toISOString(),
+              updatedAt: new Date('2025-01-01T00:00:01.000Z').toISOString(),
+            },
+          ],
+          null,
+          2,
+        ),
       )
     })
     it('throws no error', () => {
