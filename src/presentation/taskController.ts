@@ -7,6 +7,7 @@ import {
   DeleteTaskUseCase,
   DeleteTaskUseCaseErrorCode,
 } from '../useCase/deleteTaskUseCase'
+import {ListAllTasksUseCase} from '../useCase/listAllTasksUseCase'
 import {
   MarkTaskDoneUseCase,
   MarkTaskDoneUseCaseErrorCode,
@@ -158,9 +159,23 @@ export class TaskController {
       case 'list': {
         const [status] = args.slice(1)
         switch (status) {
-          case undefined:
-            console.log('Listing all tasks...')
+          case undefined: {
+            const useCase = new ListAllTasksUseCase({taskRepository})
+            try {
+              const tasks = useCase.run()
+              if (tasks.length === 0) {
+                console.log('No tasks')
+                return
+              }
+              console.log('All tasks:')
+              for (const task of tasks) {
+                console.log(`- ${task.id}: ${task.description}, ${task.status}`)
+              }
+            } catch {
+              console.error('Internal error')
+            }
             break
+          }
           case 'done':
             console.log('Listing done tasks...')
             break
