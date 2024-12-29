@@ -8,6 +8,10 @@ import {
   DeleteTaskUseCaseErrorCode,
 } from '../useCase/deleteTaskUseCase'
 import {
+  MarkTaskInProgressUseCase,
+  MarkTaskInProgressUseCaseErrorCode,
+} from '../useCase/markTaskInProgressUseCase'
+import {
   UpdateTaskUseCase,
   UpdateTaskUseCaseErrorCode,
 } from '../useCase/updateTaskUseCase'
@@ -95,9 +99,32 @@ export class TaskController {
         }
         break
       }
-      case 'mark-in-progress':
-        console.log('Marking as in progress...')
+      case 'mark-in-progress': {
+        const [id] = args.slice(1)
+        const useCase = new MarkTaskInProgressUseCase({taskRepository})
+        try {
+          useCase.run(id)
+        } catch (error: unknown) {
+          if (!(error instanceof Error)) {
+            console.error('Internal error')
+            return
+          }
+          switch (error.message) {
+            case MarkTaskInProgressUseCaseErrorCode.ID_REQUIRED:
+              console.error('Id is required')
+              break
+            case MarkTaskInProgressUseCaseErrorCode.TASK_NOT_FOUND:
+              console.error(`Task with id ${args[1]} not found`)
+              break
+            case MarkTaskInProgressUseCaseErrorCode.INTERNAL_ERROR:
+              console.error('Internal error')
+              break
+            default:
+              console.error('Internal error')
+          }
+        }
         break
+      }
       case 'mark-done':
         console.log('Marking done...')
         break
