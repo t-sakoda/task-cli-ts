@@ -28,10 +28,7 @@ describe('TaskController', () => {
       const id = '1'
       const description = 'Do the laundry'
       taskController.run('update', id, description)
-      expect(mockUpdateTaskUseCaseRun).toHaveBeenCalledWith(
-        id,
-        description,
-      )
+      expect(mockUpdateTaskUseCaseRun).toHaveBeenCalledWith(id, description)
     })
   })
 })

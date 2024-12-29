@@ -1,7 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { TaskRepository } from '../../src/infra/taskRepository'
-import { readFileSync } from 'node:fs'
-import { Task } from '../../src/domain/task'
+import {readFileSync} from 'node:fs'
+import {beforeEach, describe, expect, it, vi} from 'vitest'
+import {Task} from '../../src/domain/task'
+import {TaskRepository} from '../../src/infra/taskRepository'
 
 vi.mock('node:fs')
 const mockReadFileSync = vi.mocked(readFileSync)

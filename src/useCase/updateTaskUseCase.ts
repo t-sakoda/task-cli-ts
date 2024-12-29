@@ -10,7 +10,6 @@ export const UpdateTaskUseCaseErrorCode = {
 export type UpdateTaskUseCaseErrorCode =
   (typeof UpdateTaskUseCaseErrorCode)[keyof typeof UpdateTaskUseCaseErrorCode]
 
-
 export interface UpdateTaskUseCaseProps {
   taskRepository: ITaskRepository
 }

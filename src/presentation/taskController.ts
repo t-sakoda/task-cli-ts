@@ -1,6 +1,6 @@
 import {TaskRepository} from '../infra/taskRepository'
 import {AddTaskUseCase} from '../useCase/addTaskUseCase'
-import { UpdateTaskUseCase } from '../useCase/updateTaskUseCase'
+import {UpdateTaskUseCase} from '../useCase/updateTaskUseCase'
 
 export class TaskController {
   run(...args: string[]) {
