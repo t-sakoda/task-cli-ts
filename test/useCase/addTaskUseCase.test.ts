@@ -1,6 +1,9 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
 import {TaskStatus} from '../../src/domain/task'
-import {AddTaskUseCase} from '../../src/useCase/addTaskUseCase'
+import {
+  AddTaskUseCase,
+  AddTaskUseCaseErrorCode,
+} from '../../src/useCase/addTaskUseCase'
 import {mockTaskRepository} from '../shared/mockTaskRepository'
 
 const taskRepository = mockTaskRepository()
@@ -32,7 +35,23 @@ describe('AddTaskUseCase', () => {
   describe('Given an empty argument', () => {
     it('throws an error', () => {
       const useCase = new AddTaskUseCase({taskRepository})
-      expect(() => useCase.run('')).toThrow('No task name provided')
+      expect(() => useCase.run('')).toThrow(
+        AddTaskUseCaseErrorCode.DESCRIPTION_REQUIRED,
+      )
+    })
+  })
+
+  describe('Given an error in adding a task', () => {
+    beforeEach(() => {
+      taskRepository.insert.mockImplementation(() => {
+        throw new Error('Error')
+      })
+    })
+    it('throws an error', () => {
+      const useCase = new AddTaskUseCase({taskRepository})
+      expect(() => useCase.run('Do the laundry')).toThrow(
+        AddTaskUseCaseErrorCode.INTERNAL_ERROR,
+      )
     })
   })
 })

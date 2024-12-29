@@ -1,6 +1,13 @@
 import {Task} from '../domain/task'
 import type {ITaskRepository} from '../domain/taskRepository'
 
+export const AddTaskUseCaseErrorCode = {
+  DESCRIPTION_REQUIRED: 'DescriptionRequired',
+  INTERNAL_ERROR: 'InternalError',
+} as const
+export type AddTaskUseCaseErrorCode =
+  (typeof AddTaskUseCaseErrorCode)[keyof typeof AddTaskUseCaseErrorCode]
+
 export interface AddTaskUseCaseProps {
   taskRepository: ITaskRepository
 }
@@ -14,9 +21,14 @@ export class AddTaskUseCase {
 
   run(description: string) {
     if (!description) {
-      throw new Error('No task name provided')
+      throw new Error(AddTaskUseCaseErrorCode.DESCRIPTION_REQUIRED)
     }
     const task = Task.create(description)
-    this.taskRepository.insert(task)
+    try {
+      this.taskRepository.insert(task)
+    } catch (error) {
+      console.debug(error)
+      throw new Error(AddTaskUseCaseErrorCode.INTERNAL_ERROR)
+    }
   }
 }

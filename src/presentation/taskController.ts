@@ -1,5 +1,8 @@
 import {TaskRepository} from '../infra/taskRepository'
-import {AddTaskUseCase} from '../useCase/addTaskUseCase'
+import {
+  AddTaskUseCase,
+  AddTaskUseCaseErrorCode,
+} from '../useCase/addTaskUseCase'
 import {
   DeleteTaskUseCase,
   DeleteTaskUseCaseErrorCode,
@@ -24,7 +27,15 @@ export class TaskController {
         try {
           useCase.run(description)
         } catch (error: unknown) {
-          console.error('Internal error')
+          console.debug(error)
+          if (
+            error instanceof Error &&
+            error.message === AddTaskUseCaseErrorCode.DESCRIPTION_REQUIRED
+          ) {
+            console.error('Description required')
+          } else {
+            console.error('Internal error')
+          }
         }
         break
       }
@@ -35,13 +46,25 @@ export class TaskController {
           useCase.run(id, description)
         } catch (error: unknown) {
           console.debug(error)
-          if (
-            error instanceof Error &&
-            error.message === UpdateTaskUseCaseErrorCode.TASK_NOT_FOUND
-          ) {
-            console.error(`Task with id ${id} not found`)
-          } else {
+          if (!(error instanceof Error)) {
             console.error('Internal error')
+            return
+          }
+          switch (error.message) {
+            case UpdateTaskUseCaseErrorCode.ID_REQUIRED:
+              console.error('Id is required')
+              break
+            case UpdateTaskUseCaseErrorCode.DESCRIPTION_REQUIRED:
+              console.error('Description is required')
+              break
+            case UpdateTaskUseCaseErrorCode.TASK_NOT_FOUND:
+              console.error(`Task with id ${id} not found`)
+              break
+            case UpdateTaskUseCaseErrorCode.INTERNAL_ERROR:
+              console.error('Internal error')
+              break
+            default:
+              console.error('Internal error')
           }
         }
         break
