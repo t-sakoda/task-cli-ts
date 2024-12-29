@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { Task, TaskStatus } from "../../src/domain/task";
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
+import {Task, TaskStatus} from '../../src/domain/task'
 
 describe('Task.update', () => {
   const mockDate = new Date('2025-01-01 00:00:00')

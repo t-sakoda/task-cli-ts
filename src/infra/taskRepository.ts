@@ -1,9 +1,9 @@
 import * as fs from 'node:fs'
+import type {Task} from '../domain/task'
 import {
-  TaskRepositoryErrorCode,
   type ITaskRepository,
+  TaskRepositoryErrorCode,
 } from '../domain/taskRepository'
-import {Task} from '../domain/task'
 
 const TASKS_JSON_FILE = 'tasks.json'
 
@@ -30,7 +30,7 @@ export class TaskRepository implements ITaskRepository {
   delete(task: Task): void {
     throw new Error('Method not implemented.')
   }
-  list(): Task[]{
+  list(): Task[] {
     throw new Error('Method not implemented.')
   }
   find(id: string): Task | undefined {

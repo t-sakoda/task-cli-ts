@@ -1,11 +1,11 @@
+import {randomUUID} from 'node:crypto'
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
+import {Task} from '../../src/domain/task'
 import {
   UpdateTaskUseCase,
   UpdateTaskUseCaseErrorCode,
 } from '../../src/useCase/updateTaskUseCase'
-import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
-import {Task} from '../../src/domain/task'
 import {mockTaskRepository} from '../shared/mockTaskRepository'
-import {randomUUID} from 'node:crypto'
 
 const taskRepository = mockTaskRepository()
 

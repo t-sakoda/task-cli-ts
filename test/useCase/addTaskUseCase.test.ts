@@ -1,7 +1,7 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
+import {TaskStatus} from '../../src/domain/task'
 import {TaskRepository} from '../../src/infra/taskRepository'
 import {AddTaskUseCase} from '../../src/useCase/addTaskUseCase'
-import {TaskStatus } from '../../src/domain/task'
 
 vi.mock(import('../../src/infra/taskRepository'), () => {
   const TaskRepository = vi.fn()

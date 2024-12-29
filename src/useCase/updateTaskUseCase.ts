@@ -1,5 +1,5 @@
-import type {ITaskRepository} from '../domain/taskRepository'
 import type {Task} from '../domain/task'
+import type {ITaskRepository} from '../domain/taskRepository'
 
 export const UpdateTaskUseCaseErrorCode = {
   DESCRIPTION_REQUIRED: 'DescriptionRequired',

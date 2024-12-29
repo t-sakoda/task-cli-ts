@@ -1,4 +1,4 @@
-import type { Task } from "./task"
+import type {Task} from './task'
 
 export const TaskRepositoryErrorCode = {
   FILE_NOT_FOUND: 'FileNotFound',

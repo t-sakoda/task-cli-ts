@@ -1,4 +1,4 @@
-import { Task } from '../domain/task'
+import {Task} from '../domain/task'
 import type {ITaskRepository} from '../domain/taskRepository'
 
 export interface AddTaskUseCaseProps {
