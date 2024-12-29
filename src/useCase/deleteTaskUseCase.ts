@@ -2,7 +2,7 @@ import type {ITaskRepository} from '../domain/taskRepository'
 
 export const DeleteTaskUseCaseErrorCode = {
   INTERNAL_ERROR: 'InternalError',
-  INVALID_ID: 'InvalidId',
+  ID_REQUIRED: 'IdRequired',
   TASK_NOT_FOUND: 'TaskNotFound',
 } as const
 export type DeleteTaskUseCaseErrorCode =
@@ -20,7 +20,7 @@ export class DeleteTaskUseCase {
 
   run(id: string) {
     if (!id) {
-      throw new Error(DeleteTaskUseCaseErrorCode.INVALID_ID)
+      throw new Error(DeleteTaskUseCaseErrorCode.ID_REQUIRED)
     }
     const task = this.taskRepository.find(id)
     if (!task) {

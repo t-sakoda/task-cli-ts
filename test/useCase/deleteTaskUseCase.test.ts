@@ -37,7 +37,7 @@ describe('DeleteTaskUseCase', () => {
       const useCase = new DeleteTaskUseCase({taskRepository})
       const id = ''
       const act = () => useCase.run(id)
-      expect(act).toThrowError(DeleteTaskUseCaseErrorCode.INVALID_ID)
+      expect(act).toThrowError(DeleteTaskUseCaseErrorCode.ID_REQUIRED)
     })
   })
   describe('When an error occurs during deletion', () => {

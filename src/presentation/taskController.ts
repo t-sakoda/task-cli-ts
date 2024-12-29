@@ -1,6 +1,9 @@
 import {TaskRepository} from '../infra/taskRepository'
 import {AddTaskUseCase} from '../useCase/addTaskUseCase'
-import {DeleteTaskUseCase} from '../useCase/deleteTaskUseCase'
+import {
+  DeleteTaskUseCase,
+  DeleteTaskUseCaseErrorCode,
+} from '../useCase/deleteTaskUseCase'
 import {
   UpdateTaskUseCase,
   UpdateTaskUseCaseErrorCode,
@@ -49,7 +52,23 @@ export class TaskController {
         try {
           useCase.run(id)
         } catch (error: unknown) {
-          console.error('Internal error')
+          if (!(error instanceof Error)) {
+            console.error('Internal error')
+            return
+          }
+          switch (error.message) {
+            case DeleteTaskUseCaseErrorCode.ID_REQUIRED:
+              console.error('Id is required')
+              break
+            case DeleteTaskUseCaseErrorCode.TASK_NOT_FOUND:
+              console.error(`Task with id ${id} not found`)
+              break
+            case DeleteTaskUseCaseErrorCode.INTERNAL_ERROR:
+              console.error('Internal error')
+              break
+            default:
+              console.error('Internal error')
+          }
         }
         break
       }
