@@ -1,6 +1,6 @@
 import {TaskRepository} from '../infra/taskRepository'
 import {AddTaskUseCase} from '../useCase/addTaskUseCase'
-import { DeleteTaskUseCase } from '../useCase/deleteTaskUseCase'
+import {DeleteTaskUseCase} from '../useCase/deleteTaskUseCase'
 import {
   UpdateTaskUseCase,
   UpdateTaskUseCaseErrorCode,

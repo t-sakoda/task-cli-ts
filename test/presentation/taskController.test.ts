@@ -1,8 +1,8 @@
 import {describe, expect, it, vi} from 'vitest'
 import {TaskController} from '../../src/presentation/taskController'
 import {AddTaskUseCase} from '../../src/useCase/addTaskUseCase'
+import {DeleteTaskUseCase} from '../../src/useCase/deleteTaskUseCase'
 import {UpdateTaskUseCase} from '../../src/useCase/updateTaskUseCase'
-import { DeleteTaskUseCase } from '../../src/useCase/deleteTaskUseCase'
 
 vi.mock('../../src/useCase/addTaskUseCase')
 const mockAddTaskUseCaseRun = vi.mocked(AddTaskUseCase.prototype.run)
