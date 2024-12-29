@@ -8,6 +8,10 @@ import {
   DeleteTaskUseCaseErrorCode,
 } from '../useCase/deleteTaskUseCase'
 import {
+  MarkTaskDoneUseCase,
+  MarkTaskDoneUseCaseErrorCode,
+} from '../useCase/markTaskDoneUseCase'
+import {
   MarkTaskInProgressUseCase,
   MarkTaskInProgressUseCaseErrorCode,
 } from '../useCase/markTaskInProgressUseCase'
@@ -114,7 +118,7 @@ export class TaskController {
               console.error('Id is required')
               break
             case MarkTaskInProgressUseCaseErrorCode.TASK_NOT_FOUND:
-              console.error(`Task with id ${args[1]} not found`)
+              console.error(`Task with id ${id} not found`)
               break
             case MarkTaskInProgressUseCaseErrorCode.INTERNAL_ERROR:
               console.error('Internal error')
@@ -125,9 +129,32 @@ export class TaskController {
         }
         break
       }
-      case 'mark-done':
-        console.log('Marking done...')
+      case 'mark-done': {
+        const [id] = args.slice(1)
+        const useCase = new MarkTaskDoneUseCase({taskRepository})
+        try {
+          useCase.run(id)
+        } catch (error: unknown) {
+          if (!(error instanceof Error)) {
+            console.error('Internal error')
+            return
+          }
+          switch (error.message) {
+            case MarkTaskDoneUseCaseErrorCode.ID_REQUIRED:
+              console.error('Id is required')
+              break
+            case MarkTaskDoneUseCaseErrorCode.TASK_NOT_FOUND:
+              console.error(`Task with id ${id} not found`)
+              break
+            case MarkTaskDoneUseCaseErrorCode.INTERNAL_ERROR:
+              console.error('Internal error')
+              break
+            default:
+              console.error('Internal error')
+          }
+        }
         break
+      }
       case 'list': {
         switch (args[1]) {
           case undefined:
