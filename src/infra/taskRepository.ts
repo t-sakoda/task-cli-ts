@@ -67,7 +67,13 @@ export class TaskRepository implements ITaskRepository {
     this.writeJsonFile(tasks)
   }
   delete(task: Task): void {
-    throw new Error('Method not implemented.')
+    const tasks = this.readJsonFile()
+    const index = tasks.findIndex((t) => t.id === task.id)
+    if (index === -1) {
+      throw new Error(TaskRepositoryErrorCode.TASK_NOT_FOUND)
+    }
+    tasks.splice(index, 1)
+    this.writeJsonFile(tasks)
   }
   list(): Task[] {
     throw new Error('Method not implemented.')
