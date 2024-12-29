@@ -10,8 +10,17 @@ export const UpdateTaskUseCaseErrorCode = {
 export type UpdateTaskUseCaseErrorCode =
   (typeof UpdateTaskUseCaseErrorCode)[keyof typeof UpdateTaskUseCaseErrorCode]
 
+
+export interface UpdateTaskUseCaseProps {
+  taskRepository: ITaskRepository
+}
+
 export class UpdateTaskUseCase {
-  constructor(private taskRepository: ITaskRepository) {}
+  private taskRepository: ITaskRepository
+
+  constructor(props: UpdateTaskUseCaseProps) {
+    this.taskRepository = props.taskRepository
+  }
 
   run(id: string, description: string): void {
     if (!id) {

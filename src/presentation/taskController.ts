@@ -1,5 +1,6 @@
 import {TaskRepository} from '../infra/taskRepository'
 import {AddTaskUseCase} from '../useCase/addTaskUseCase'
+import { UpdateTaskUseCase } from '../useCase/updateTaskUseCase'
 
 export class TaskController {
   run(...args: string[]) {
@@ -11,13 +12,17 @@ export class TaskController {
     const taskRepository = new TaskRepository()
     switch (args[0]) {
       case 'add': {
+        const [description] = args.slice(1)
         const useCase = new AddTaskUseCase({taskRepository})
-        useCase.run(args[1])
+        useCase.run(description)
         break
       }
-      case 'update':
-        console.log('Updating...')
+      case 'update': {
+        const [id, description] = args.slice(1)
+        const useCase = new UpdateTaskUseCase({taskRepository})
+        useCase.run(id, description)
         break
+      }
       case 'delete':
         console.log('Deleting...')
         break

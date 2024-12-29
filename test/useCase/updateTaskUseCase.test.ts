@@ -16,7 +16,7 @@ describe('UpdateTaskUseCase', () => {
 
   describe('Given no id', () => {
     it('throws an error, ID_REQUIRED', () => {
-      const useCase = new UpdateTaskUseCase(taskRepository)
+      const useCase = new UpdateTaskUseCase({taskRepository})
       expect(() => useCase.run('', 'description')).toThrow(
         UpdateTaskUseCaseErrorCode.ID_REQUIRED,
       )
@@ -24,7 +24,7 @@ describe('UpdateTaskUseCase', () => {
   })
   describe('Given no description', () => {
     it('throws an error, DESCRIPTION_REQUIRED', () => {
-      const useCase = new UpdateTaskUseCase(taskRepository)
+      const useCase = new UpdateTaskUseCase({taskRepository})
       expect(() => useCase.run(randomUUID(), '')).toThrow(
         UpdateTaskUseCaseErrorCode.DESCRIPTION_REQUIRED,
       )
@@ -35,7 +35,7 @@ describe('UpdateTaskUseCase', () => {
       taskRepository.find.mockReturnValue(undefined)
     })
     it('throws an error, TASK_NOT_FOUND', () => {
-      const useCase = new UpdateTaskUseCase(taskRepository)
+      const useCase = new UpdateTaskUseCase({taskRepository})
       expect(() => useCase.run(randomUUID(), 'description')).toThrow(
         UpdateTaskUseCaseErrorCode.TASK_NOT_FOUND,
       )
@@ -48,7 +48,7 @@ describe('UpdateTaskUseCase', () => {
       })
     })
     it('throws an error, INTERNAL_ERROR', () => {
-      const useCase = new UpdateTaskUseCase(taskRepository)
+      const useCase = new UpdateTaskUseCase({taskRepository})
       expect(() => useCase.run(randomUUID(), 'description')).toThrow(
         UpdateTaskUseCaseErrorCode.INTERNAL_ERROR,
       )
@@ -63,7 +63,7 @@ describe('UpdateTaskUseCase', () => {
       })
     })
     it('throws an error, INTERNAL_ERROR', () => {
-      const useCase = new UpdateTaskUseCase(taskRepository)
+      const useCase = new UpdateTaskUseCase({taskRepository})
       expect(() => useCase.run(randomUUID(), 'description')).toThrow(
         UpdateTaskUseCaseErrorCode.INTERNAL_ERROR,
       )
@@ -75,7 +75,7 @@ describe('UpdateTaskUseCase', () => {
       taskRepository.find.mockReturnValue(task)
     })
     it('updates the task', () => {
-      const useCase = new UpdateTaskUseCase(taskRepository)
+      const useCase = new UpdateTaskUseCase({taskRepository})
       useCase.run(randomUUID(), 'new description')
       expect(task.description).toBe('new description')
     })
