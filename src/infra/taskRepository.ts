@@ -76,7 +76,18 @@ export class TaskRepository implements ITaskRepository {
     this.writeJsonFile(tasks)
   }
   list(): Task[] {
-    throw new Error('Method not implemented.')
+    try {
+      const taskObjs = this.readJsonFile()
+      return taskObjs.map((t) => Task.build(t))
+    } catch (error: unknown) {
+      if (
+        error instanceof Error &&
+        error.message === TaskRepositoryErrorCode.FILE_NOT_FOUND
+      ) {
+        return []
+      }
+      throw new Error(TaskRepositoryErrorCode.INTERNAL_ERROR)
+    }
   }
   find(id: string): Task | undefined {
     let tasks: Task[] = []
