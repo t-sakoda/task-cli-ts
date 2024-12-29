@@ -71,4 +71,12 @@ export class Task {
     this.description = description
     this.updatedAt = new Date().toISOString()
   }
+
+  mark(status: TaskStatus): void {
+    if (!Object.values(TaskStatus).includes(status)) {
+      throw new Error('Invalid status')
+    }
+    this.status = status
+    this.updatedAt = new Date().toISOString()
+  }
 }
