@@ -16,10 +16,10 @@ export interface TaskProps {
 }
 
 export class Task {
-  id: string
+  readonly id: string
   description: string
   status: TaskStatus
-  createdAt: string
+  readonly createdAt: string
   updatedAt: string
 
   private constructor(props: TaskProps) {
@@ -31,13 +31,18 @@ export class Task {
   }
 
   static create(description: string): Task {
+    const now = new Date().toISOString()
     return new Task({
       id: randomUUID(),
       description,
       status: TaskStatus.TODO,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: now,
+      updatedAt: now,
     })
+  }
+
+  static build(props: TaskProps): Task {
+    return new Task(props)
   }
 
   update(description: string): void {
