@@ -44,7 +44,10 @@ export class TaskRepository implements ITaskRepository {
         throw error
       }
     }
-    // TODO: 既に存在していたらエラーを返す
+    const existingTask = tasks.find(t => t.id === task.id)
+    if (existingTask) {
+      throw new Error(TaskRepositoryErrorCode.TASK_ALREADY_EXISTS)
+    }
     tasks.push(task)
     this.writeJsonFile(tasks)
   }
