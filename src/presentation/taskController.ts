@@ -156,7 +156,8 @@ export class TaskController {
         break
       }
       case 'list': {
-        switch (args[1]) {
+        const [status] = args.slice(1)
+        switch (status) {
           case undefined:
             console.log('Listing all tasks...')
             break
