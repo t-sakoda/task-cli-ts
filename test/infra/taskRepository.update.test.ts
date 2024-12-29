@@ -1,9 +1,8 @@
+import {readFileSync, writeFileSync} from 'node:fs'
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
+import {Task, TaskStatus} from '../../src/domain/task'
+import {TaskRepositoryErrorCode} from '../../src/domain/taskRepository'
 import {TaskRepository} from '../../src/infra/taskRepository'
-import { Task, TaskStatus } from '../../src/domain/task'
-import { readFileSync, writeFileSync } from 'node:fs'
-import { before } from 'node:test'
-import { TaskRepositoryErrorCode } from '../../src/domain/taskRepository'
 
 vi.mock('node:fs')
 const mockReadFileSync = vi.mocked(readFileSync)
@@ -30,13 +29,18 @@ describe('TaskRepository.update', () => {
       vi.advanceTimersByTime(1000)
       task.update('updated task')
       taskRepository.update(task)
-      expect(mockWriteFileSync).toHaveBeenCalledWith('tasks.json', JSON.stringify([{
-        id: task.id,
-        description: 'updated task',
-        status: TaskStatus.TODO,
-        createdAt: new Date('2025-01-01T00:00:00.000Z').toISOString(),
-        updatedAt: new Date('2025-01-01T00:00:01.000Z').toISOString(),
-      }]))
+      expect(mockWriteFileSync).toHaveBeenCalledWith(
+        'tasks.json',
+        JSON.stringify([
+          {
+            id: task.id,
+            description: 'updated task',
+            status: TaskStatus.TODO,
+            createdAt: new Date('2025-01-01T00:00:00.000Z').toISOString(),
+            updatedAt: new Date('2025-01-01T00:00:01.000Z').toISOString(),
+          },
+        ]),
+      )
     })
     it('throws no error', () => {
       expect(() => taskRepository.update(task)).not.toThrow()
@@ -48,7 +52,9 @@ describe('TaskRepository.update', () => {
     })
     it('throws an error', () => {
       const task = Task.create('task1')
-      expect(() => taskRepository.update(task)).toThrow(TaskRepositoryErrorCode.TASK_NOT_FOUND)
+      expect(() => taskRepository.update(task)).toThrow(
+        TaskRepositoryErrorCode.TASK_NOT_FOUND,
+      )
     })
   })
   describe('Given no JSON file', () => {
@@ -61,7 +67,9 @@ describe('TaskRepository.update', () => {
     })
     it('throws an error, FILE_NOT_FOUND', () => {
       const task = Task.create('task1')
-      expect(() => taskRepository.update(task)).toThrow(TaskRepositoryErrorCode.FILE_NOT_FOUND)
+      expect(() => taskRepository.update(task)).toThrow(
+        TaskRepositoryErrorCode.FILE_NOT_FOUND,
+      )
     })
   })
   describe('Given an error occurs in reading JSON file', () => {
@@ -72,7 +80,9 @@ describe('TaskRepository.update', () => {
     })
     it('throws an error', () => {
       const task = Task.create('task1')
-      expect(() => taskRepository.update(task)).toThrow(TaskRepositoryErrorCode.INTERNAL_ERROR)
+      expect(() => taskRepository.update(task)).toThrow(
+        TaskRepositoryErrorCode.INTERNAL_ERROR,
+      )
     })
   })
   describe('Given an error occurs in writing JSON file', () => {
@@ -85,7 +95,9 @@ describe('TaskRepository.update', () => {
     })
     it('throws an error, FILE_WRITE_ERROR', () => {
       task.update('updated task')
-      expect(() => taskRepository.update(task)).toThrow(TaskRepositoryErrorCode.FILE_WRITE_ERROR)
+      expect(() => taskRepository.update(task)).toThrow(
+        TaskRepositoryErrorCode.FILE_WRITE_ERROR,
+      )
     })
   })
 })

@@ -1,8 +1,8 @@
 import {readFileSync, writeFileSync} from 'node:fs'
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
 import {Task} from '../../src/domain/task'
+import {TaskRepositoryErrorCode} from '../../src/domain/taskRepository'
 import {TaskRepository} from '../../src/infra/taskRepository'
-import { TaskRepositoryErrorCode } from '../../src/domain/taskRepository'
 
 vi.mock('node:fs')
 const mockReadFileSync = vi.mocked(readFileSync)
@@ -43,7 +43,9 @@ describe('TaskRepository.add', () => {
       const taskRepository = new TaskRepository()
       const description = 'Do the laundry'
       const task = Task.create(description)
-      expect(() => taskRepository.insert(task)).toThrow(TaskRepositoryErrorCode.INTERNAL_ERROR)
+      expect(() => taskRepository.insert(task)).toThrow(
+        TaskRepositoryErrorCode.INTERNAL_ERROR,
+      )
     })
   })
 
@@ -67,9 +69,7 @@ describe('TaskRepository.add', () => {
     const description = 'Do the laundry'
     const task = Task.create(description)
     beforeEach(() => {
-      mockReadFileSync.mockReturnValue(
-        JSON.stringify([task]),
-      )
+      mockReadFileSync.mockReturnValue(JSON.stringify([task]))
     })
     it('throws an error', () => {
       const taskRepository = new TaskRepository()

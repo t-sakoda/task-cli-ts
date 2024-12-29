@@ -14,7 +14,10 @@ export class TaskRepository implements ITaskRepository {
       const file = fs.readFileSync(TASKS_JSON_FILE)
       tasks = JSON.parse(file.toString())
     } catch (error: unknown) {
-      if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
+      if (
+        error instanceof Error &&
+        (error as NodeJS.ErrnoException).code === 'ENOENT'
+      ) {
         console.log('No JSON file found. Creating a new one.')
         throw new Error(TaskRepositoryErrorCode.FILE_NOT_FOUND)
       }
@@ -38,13 +41,16 @@ export class TaskRepository implements ITaskRepository {
     try {
       tasks = this.readJsonFile()
     } catch (error: unknown) {
-      if (error instanceof Error && error.message === TaskRepositoryErrorCode.FILE_NOT_FOUND) {
+      if (
+        error instanceof Error &&
+        error.message === TaskRepositoryErrorCode.FILE_NOT_FOUND
+      ) {
         tasks = []
       } else {
         throw error
       }
     }
-    const existingTask = tasks.find(t => t.id === task.id)
+    const existingTask = tasks.find((t) => t.id === task.id)
     if (existingTask) {
       throw new Error(TaskRepositoryErrorCode.TASK_ALREADY_EXISTS)
     }
