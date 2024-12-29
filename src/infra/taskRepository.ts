@@ -1,5 +1,5 @@
 import * as fs from 'node:fs'
-import type {Task} from '../domain/task'
+import {Task} from '../domain/task'
 import {
   type ITaskRepository,
   TaskRepositoryErrorCode,
@@ -29,7 +29,7 @@ export class TaskRepository implements ITaskRepository {
 
   private writeJsonFile(tasks: Task[]): void {
     try {
-      fs.writeFileSync(TASKS_JSON_FILE, JSON.stringify(tasks))
+      fs.writeFileSync(TASKS_JSON_FILE, JSON.stringify(tasks, null, 2))
     } catch (error: unknown) {
       console.error('Error writing to JSON file:', error)
       throw new Error(TaskRepositoryErrorCode.FILE_WRITE_ERROR)
@@ -85,6 +85,10 @@ export class TaskRepository implements ITaskRepository {
       }
       throw error
     }
-    return tasks.find((t) => t.id === id)
+    const taskObj = tasks.find((t) => t.id === id)
+    if (!taskObj) {
+      return undefined
+    }
+    return Task.build(taskObj)
   }
 }

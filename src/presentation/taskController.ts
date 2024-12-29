@@ -1,6 +1,6 @@
 import {TaskRepository} from '../infra/taskRepository'
 import {AddTaskUseCase} from '../useCase/addTaskUseCase'
-import {UpdateTaskUseCase} from '../useCase/updateTaskUseCase'
+import {UpdateTaskUseCase, UpdateTaskUseCaseErrorCode} from '../useCase/updateTaskUseCase'
 
 export class TaskController {
   run(...args: string[]) {
@@ -14,13 +14,26 @@ export class TaskController {
       case 'add': {
         const [description] = args.slice(1)
         const useCase = new AddTaskUseCase({taskRepository})
-        useCase.run(description)
+        try {
+          useCase.run(description)
+        } catch (error: unknown) {
+          console.error('Internal error')
+        }
         break
       }
       case 'update': {
         const [id, description] = args.slice(1)
         const useCase = new UpdateTaskUseCase({taskRepository})
-        useCase.run(id, description)
+        try {
+          useCase.run(id, description)
+        } catch (error: unknown) {
+          console.debug(error)
+          if (error instanceof Error && error.message === UpdateTaskUseCaseErrorCode.TASK_NOT_FOUND) {
+            console.error(`Task with id ${id} not found`)
+          } else {
+            console.error('Internal error')
+          }
+        }
         break
       }
       case 'delete':
