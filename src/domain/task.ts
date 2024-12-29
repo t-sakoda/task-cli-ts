@@ -2,6 +2,7 @@ import {randomUUID} from 'node:crypto'
 
 export const TaskErrorCode = {
   INVALID_PROPERTIES: 'InvalidTaskProperties',
+  INVALID_STATUS: 'InvalidStatus',
 } as const
 export type TaskErrorCode = (typeof TaskErrorCode)[keyof typeof TaskErrorCode]
 
@@ -74,7 +75,7 @@ export class Task {
 
   mark(status: TaskStatus): void {
     if (!Object.values(TaskStatus).includes(status)) {
-      throw new Error('Invalid status')
+      throw new Error(TaskErrorCode.INVALID_STATUS)
     }
     this.status = status
     this.updatedAt = new Date().toISOString()
