@@ -73,6 +73,18 @@ export class TaskRepository implements ITaskRepository {
     throw new Error('Method not implemented.')
   }
   find(id: string): Task | undefined {
-    throw new Error('Method not implemented.')
+    let tasks: Task[] = []
+    try {
+      tasks = this.readJsonFile()
+    } catch (error: unknown) {
+      if (
+        error instanceof Error &&
+        error.message === TaskRepositoryErrorCode.FILE_NOT_FOUND
+      ) {
+        return undefined
+      }
+      throw error
+    }
+    return tasks.find((t) => t.id === id)
   }
 }
