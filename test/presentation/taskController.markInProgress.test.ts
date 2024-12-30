@@ -1,35 +1,37 @@
 import {afterAll, beforeEach, describe, expect, it, vi} from 'vitest'
+import {TaskStatus} from '../../src/domain/task'
 import {TaskController} from '../../src/presentation/taskController'
 import {
-  MarkTaskInProgressUseCase,
-  MarkTaskInProgressUseCaseErrorCode,
-} from '../../src/useCase/markTaskInProgressUseCase'
+  MarkTaskUseCase,
+  MarkTaskUseCaseErrorCode,
+} from '../../src/useCase/markTaskUseCase'
 
-vi.mock('../../src/useCase/markTaskInProgressUseCase')
-const mockMarkTaskInProgressUseCaseRun = vi.mocked(
-  MarkTaskInProgressUseCase.prototype.run,
-)
+vi.mock('../../src/useCase/markTaskUseCase')
+const mockMarkTaskUseCaseRun = vi.mocked(MarkTaskUseCase.prototype.run)
 
 const consoleError = vi.spyOn(console, 'error')
 
-describe('TaskController with markInProgress command', () => {
+describe('TaskController with mark in-progress command', () => {
   afterAll(() => {
     vi.restoreAllMocks()
   })
 
   describe('Given id which task exists', () => {
-    it('calls MarkTaskInProgressUseCase.run with the correct task id', () => {
+    it('calls MarkTaskUseCase.run with the correct task id', () => {
       const taskController = new TaskController()
       const id = '1'
       taskController.run('mark-in-progress', id)
-      expect(mockMarkTaskInProgressUseCaseRun).toHaveBeenCalledWith(id)
+      expect(mockMarkTaskUseCaseRun).toHaveBeenCalledWith(
+        id,
+        TaskStatus.IN_PROGRESS,
+      )
     })
   })
 
-  describe('When MarkTaskInProgressUseCase.run throws ID_REQUIRED', () => {
+  describe('When MarkTaskUseCase.run throws ID_REQUIRED', () => {
     beforeEach(() => {
-      mockMarkTaskInProgressUseCaseRun.mockImplementation(() => {
-        throw new Error(MarkTaskInProgressUseCaseErrorCode.ID_REQUIRED)
+      mockMarkTaskUseCaseRun.mockImplementation(() => {
+        throw new Error(MarkTaskUseCaseErrorCode.ID_REQUIRED)
       })
     })
 
@@ -40,10 +42,10 @@ describe('TaskController with markInProgress command', () => {
     })
   })
 
-  describe('When MarkTaskInProgressUseCase.run throws TASK_NOT_FOUND', () => {
+  describe('When MarkTaskUseCase.run throws TASK_NOT_FOUND', () => {
     beforeEach(() => {
-      mockMarkTaskInProgressUseCaseRun.mockImplementation(() => {
-        throw new Error(MarkTaskInProgressUseCaseErrorCode.TASK_NOT_FOUND)
+      mockMarkTaskUseCaseRun.mockImplementation(() => {
+        throw new Error(MarkTaskUseCaseErrorCode.TASK_NOT_FOUND)
       })
     })
 
@@ -55,10 +57,10 @@ describe('TaskController with markInProgress command', () => {
     })
   })
 
-  describe('When MarkTaskInProgressUseCase.run throws INTERNAL_ERROR', () => {
+  describe('When MarkTaskUseCase.run throws INTERNAL_ERROR', () => {
     beforeEach(() => {
-      mockMarkTaskInProgressUseCaseRun.mockImplementation(() => {
-        throw new Error(MarkTaskInProgressUseCaseErrorCode.INTERNAL_ERROR)
+      mockMarkTaskUseCaseRun.mockImplementation(() => {
+        throw new Error(MarkTaskUseCaseErrorCode.INTERNAL_ERROR)
       })
     })
 

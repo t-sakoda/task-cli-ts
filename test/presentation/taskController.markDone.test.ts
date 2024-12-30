@@ -1,12 +1,13 @@
 import {afterAll, afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
+import {TaskStatus} from '../../src/domain/task'
 import {TaskController} from '../../src/presentation/taskController'
 import {
-  MarkTaskDoneUseCase,
-  MarkTaskDoneUseCaseErrorCode,
-} from '../../src/useCase/markTaskDoneUseCase'
+  MarkTaskUseCase,
+  MarkTaskUseCaseErrorCode,
+} from '../../src/useCase/markTaskUseCase'
 
-vi.mock('../../src/useCase/markTaskDoneUseCase')
-const mockMarkTaskDoneUseCaseRun = vi.mocked(MarkTaskDoneUseCase.prototype.run)
+vi.mock('../../src/useCase/markTaskUseCase')
+const mockMarkTaskUseCaseRun = vi.mocked(MarkTaskUseCase.prototype.run)
 
 const consoleError = vi.spyOn(console, 'error')
 
@@ -23,14 +24,14 @@ describe('TaskController with mark-done command', () => {
       const taskController = new TaskController()
       const id = '1'
       taskController.run('mark-done', id)
-      expect(mockMarkTaskDoneUseCaseRun).toHaveBeenCalledWith(id)
+      expect(mockMarkTaskUseCaseRun).toHaveBeenCalledWith(id, TaskStatus.DONE)
     })
   })
 
   describe('When MarkTaskDoneUseCase.run throws ID_REQUIRED', () => {
     beforeEach(() => {
-      mockMarkTaskDoneUseCaseRun.mockImplementation(() => {
-        throw new Error(MarkTaskDoneUseCaseErrorCode.ID_REQUIRED)
+      mockMarkTaskUseCaseRun.mockImplementation(() => {
+        throw new Error(MarkTaskUseCaseErrorCode.ID_REQUIRED)
       })
     })
 
@@ -43,8 +44,8 @@ describe('TaskController with mark-done command', () => {
 
   describe('When MarkTaskDoneUseCase.run throws TASK_NOT_FOUND', () => {
     beforeEach(() => {
-      mockMarkTaskDoneUseCaseRun.mockImplementation(() => {
-        throw new Error(MarkTaskDoneUseCaseErrorCode.TASK_NOT_FOUND)
+      mockMarkTaskUseCaseRun.mockImplementation(() => {
+        throw new Error(MarkTaskUseCaseErrorCode.TASK_NOT_FOUND)
       })
     })
 
@@ -56,10 +57,10 @@ describe('TaskController with mark-done command', () => {
     })
   })
 
-  describe('When MarkTaskDoneUseCase.run throws INTERNAL_ERROR', () => {
+  describe('When MarkTaskUseCase.run throws INTERNAL_ERROR', () => {
     beforeEach(() => {
-      mockMarkTaskDoneUseCaseRun.mockImplementation(() => {
-        throw new Error(MarkTaskDoneUseCaseErrorCode.INTERNAL_ERROR)
+      mockMarkTaskUseCaseRun.mockImplementation(() => {
+        throw new Error(MarkTaskUseCaseErrorCode.INTERNAL_ERROR)
       })
     })
 

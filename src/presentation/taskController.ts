@@ -10,13 +10,9 @@ import {
 } from '../useCase/deleteTaskUseCase'
 import {ListTasksByStatusUseCase} from '../useCase/listTasksByStatusUseCase'
 import {
-  MarkTaskDoneUseCase,
-  MarkTaskDoneUseCaseErrorCode,
-} from '../useCase/markTaskDoneUseCase'
-import {
-  MarkTaskInProgressUseCase,
-  MarkTaskInProgressUseCaseErrorCode,
-} from '../useCase/markTaskInProgressUseCase'
+  MarkTaskUseCase,
+  MarkTaskUseCaseErrorCode,
+} from '../useCase/markTaskUseCase'
 import {
   UpdateTaskUseCase,
   UpdateTaskUseCaseErrorCode,
@@ -105,22 +101,22 @@ export class TaskController {
       }
       case 'mark-in-progress': {
         const [id] = args.slice(1)
-        const useCase = new MarkTaskInProgressUseCase({taskRepository})
+        const useCase = new MarkTaskUseCase({taskRepository})
         try {
-          useCase.run(id)
+          useCase.run(id, TaskStatus.IN_PROGRESS)
         } catch (error: unknown) {
           if (!(error instanceof Error)) {
             console.error('Internal error')
             return
           }
           switch (error.message) {
-            case MarkTaskInProgressUseCaseErrorCode.ID_REQUIRED:
+            case MarkTaskUseCaseErrorCode.ID_REQUIRED:
               console.error('Id is required')
               break
-            case MarkTaskInProgressUseCaseErrorCode.TASK_NOT_FOUND:
+            case MarkTaskUseCaseErrorCode.TASK_NOT_FOUND:
               console.error(`Task with id ${id} not found`)
               break
-            case MarkTaskInProgressUseCaseErrorCode.INTERNAL_ERROR:
+            case MarkTaskUseCaseErrorCode.INTERNAL_ERROR:
               console.error('Internal error')
               break
             default:
@@ -131,22 +127,22 @@ export class TaskController {
       }
       case 'mark-done': {
         const [id] = args.slice(1)
-        const useCase = new MarkTaskDoneUseCase({taskRepository})
+        const useCase = new MarkTaskUseCase({taskRepository})
         try {
-          useCase.run(id)
+          useCase.run(id, TaskStatus.DONE)
         } catch (error: unknown) {
           if (!(error instanceof Error)) {
             console.error('Internal error')
             return
           }
           switch (error.message) {
-            case MarkTaskDoneUseCaseErrorCode.ID_REQUIRED:
+            case MarkTaskUseCaseErrorCode.ID_REQUIRED:
               console.error('Id is required')
               break
-            case MarkTaskDoneUseCaseErrorCode.TASK_NOT_FOUND:
+            case MarkTaskUseCaseErrorCode.TASK_NOT_FOUND:
               console.error(`Task with id ${id} not found`)
               break
-            case MarkTaskDoneUseCaseErrorCode.INTERNAL_ERROR:
+            case MarkTaskUseCaseErrorCode.INTERNAL_ERROR:
               console.error('Internal error')
               break
             default:
