@@ -30,7 +30,7 @@ export class TaskRepository implements ITaskRepository {
 
   private writeJsonFile(taskObjects: TaskObject[]): void {
     try {
-      fs.writeFileSync(TASKS_JSON_FILE, JSON.stringify(taskObjects))
+      fs.writeFileSync(TASKS_JSON_FILE, JSON.stringify(taskObjects, null, 2))
     } catch (error: unknown) {
       console.error('Error writing to JSON file:', error)
       throw new Error(TaskRepositoryErrorCode.FILE_WRITE_ERROR)

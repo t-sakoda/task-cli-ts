@@ -1,3 +1,4 @@
+import {TaskStatus} from '../domain/task'
 import {TaskRepository} from '../infra/taskRepository'
 import {
   AddTaskUseCase,
@@ -7,7 +8,7 @@ import {
   DeleteTaskUseCase,
   DeleteTaskUseCaseErrorCode,
 } from '../useCase/deleteTaskUseCase'
-import {ListAllTasksUseCase} from '../useCase/listAllTasksUseCase'
+import {ListTasksByStatusUseCase} from '../useCase/listTasksByStatusUseCase'
 import {
   MarkTaskDoneUseCase,
   MarkTaskDoneUseCaseErrorCode,
@@ -158,9 +159,9 @@ export class TaskController {
       }
       case 'list': {
         const [status] = args.slice(1)
+        const useCase = new ListTasksByStatusUseCase({taskRepository})
         switch (status) {
           case undefined: {
-            const useCase = new ListAllTasksUseCase({taskRepository})
             try {
               const tasks = useCase.run()
               if (tasks.length === 0) {
@@ -176,15 +177,54 @@ export class TaskController {
             }
             break
           }
-          case 'done':
-            console.log('Listing done tasks...')
+          case 'done': {
+            try {
+              const tasks = useCase.run(TaskStatus.DONE)
+              if (tasks.length === 0) {
+                console.log('No tasks')
+                return
+              }
+              console.log('Done tasks:')
+              for (const task of tasks) {
+                console.log(`- ${task.id}: ${task.description}, ${task.status}`)
+              }
+            } catch {
+              console.error('Internal error')
+            }
             break
-          case 'todo':
-            console.log('Listing todo tasks...')
+          }
+          case 'todo': {
+            try {
+              const tasks = useCase.run(TaskStatus.TODO)
+              if (tasks.length === 0) {
+                console.log('No tasks')
+                return
+              }
+              console.log('Todo tasks:')
+              for (const task of tasks) {
+                console.log(`- ${task.id}: ${task.description}, ${task.status}`)
+              }
+            } catch {
+              console.error('Internal error')
+            }
             break
-          case 'in-progress':
-            console.log('Listing tasks in progress...')
+          }
+          case 'in-progress': {
+            try {
+              const tasks = useCase.run(TaskStatus.IN_PROGRESS)
+              if (tasks.length === 0) {
+                console.log('No tasks')
+                return
+              }
+              console.log('In-progress tasks:')
+              for (const task of tasks) {
+                console.log(`- ${task.id}: ${task.description}, ${task.status}`)
+              }
+            } catch {
+              console.error('Internal error')
+            }
             break
+          }
           default:
             console.error('Invalid list option')
             process.exit(1)
