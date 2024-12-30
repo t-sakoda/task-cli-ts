@@ -13,7 +13,6 @@ export class TaskRepository implements ITaskRepository {
     try {
       const file = fs.readFileSync(TASKS_JSON_FILE, 'utf-8')
       taskObjects = JSON.parse(file)
-      console.debug(taskObjects)
     } catch (error: unknown) {
       if (
         error instanceof Error &&

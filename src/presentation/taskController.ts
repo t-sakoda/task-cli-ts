@@ -37,7 +37,6 @@ export class TaskController {
         try {
           useCase.run(description)
         } catch (error: unknown) {
-          console.debug(error)
           if (
             error instanceof Error &&
             error.message === AddTaskUseCaseErrorCode.DESCRIPTION_REQUIRED
@@ -55,7 +54,6 @@ export class TaskController {
         try {
           useCase.run(id, description)
         } catch (error: unknown) {
-          console.debug(error)
           if (!(error instanceof Error)) {
             console.error('Internal error')
             return

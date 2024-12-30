@@ -27,7 +27,6 @@ export class AddTaskUseCase {
     try {
       this.taskRepository.insert(task)
     } catch (error) {
-      console.debug(error)
       throw new Error(AddTaskUseCaseErrorCode.INTERNAL_ERROR)
     }
   }
