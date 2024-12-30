@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs'
 import {beforeEach, describe, expect, it, vi} from 'vitest'
-import {Task} from '../../src/domain/task'
+import {Task, TaskStatus} from '../../src/domain/task'
 import {TaskRepositoryErrorCode} from '../../src/domain/taskRepository'
 import {TaskRepository} from '../../src/infra/taskRepository'
 
@@ -10,8 +10,8 @@ const mockReadFileSync = vi.mocked(readFileSync)
 describe('TaskRepository.list', () => {
   const taskRepository = new TaskRepository()
   const task1 = Task.create('Task 1')
-  const task2 = Task.create('Task 2')
-  const task3 = Task.create('Task 3')
+  const task2 = Task.create('Task 2').mark(TaskStatus.IN_PROGRESS)
+  const task3 = Task.create('Task 3').mark(TaskStatus.DONE)
 
   describe('Given some tasks', () => {
     beforeEach(() => {
@@ -68,6 +68,39 @@ describe('TaskRepository.list', () => {
       expect(() => taskRepository.list()).toThrowError(
         TaskRepositoryErrorCode.INTERNAL_ERROR,
       )
+    })
+  })
+
+  describe('Given some tasks and TaskStatus.TODO as filter', () => {
+    beforeEach(() => {
+      const str = JSON.stringify([task1, task2, task3])
+      mockReadFileSync.mockReturnValue(str)
+    })
+    it('returns DONE tasks', () => {
+      const tasks = taskRepository.list(TaskStatus.TODO)
+      expect(tasks).toEqual([task1])
+    })
+  })
+
+  describe('Given some tasks and TaskStatus.IN_PROGRESS as filter', () => {
+    beforeEach(() => {
+      const str = JSON.stringify([task1, task2, task3])
+      mockReadFileSync.mockReturnValue(str)
+    })
+    it('returns DONE tasks', () => {
+      const tasks = taskRepository.list(TaskStatus.IN_PROGRESS)
+      expect(tasks).toEqual([task2])
+    })
+  })
+
+  describe('Given some tasks and TaskStatus.DONE as filter', () => {
+    beforeEach(() => {
+      const str = JSON.stringify([task1, task2, task3])
+      mockReadFileSync.mockReturnValue(str)
+    })
+    it('returns DONE tasks', () => {
+      const tasks = taskRepository.list(TaskStatus.DONE)
+      expect(tasks).toEqual([task3])
     })
   })
 })

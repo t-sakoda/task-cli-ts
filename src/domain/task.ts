@@ -13,13 +13,15 @@ export const TaskStatus = {
 } as const
 export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
 
-export interface TaskProps {
+export interface TaskObject {
   id: string
   description: string
   status: TaskStatus
   createdAt: string
   updatedAt: string
 }
+
+export interface TaskProps extends TaskObject {}
 
 export class Task {
   readonly id: string
@@ -65,19 +67,31 @@ export class Task {
     return new Task(props)
   }
 
-  update(description: string): void {
+  toObject(): TaskObject {
+    return {
+      id: this.id,
+      description: this.description,
+      status: this.status,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    }
+  }
+
+  update(description: string): Task {
     if (!description) {
       throw new Error('Description is required')
     }
     this.description = description
     this.updatedAt = new Date().toISOString()
+    return this
   }
 
-  mark(status: TaskStatus): void {
+  mark(status: TaskStatus): Task {
     if (!Object.values(TaskStatus).includes(status)) {
       throw new Error(TaskErrorCode.INVALID_STATUS)
     }
     this.status = status
     this.updatedAt = new Date().toISOString()
+    return this
   }
 }

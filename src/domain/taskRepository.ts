@@ -1,4 +1,4 @@
-import type {Task} from './task'
+import type {Task, TaskStatus} from './task'
 
 export const TaskRepositoryErrorCode = {
   FILE_NOT_FOUND: 'FileNotFound',
@@ -14,6 +14,6 @@ export interface ITaskRepository {
   insert(task: Task): void
   update(task: Task): void
   delete(task: Task): void
-  list(): Task[]
+  list(filterByStatus?: TaskStatus): Task[]
   find(id: string): Task | undefined
 }

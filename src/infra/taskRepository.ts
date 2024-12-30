@@ -1,5 +1,5 @@
 import * as fs from 'node:fs'
-import {Task} from '../domain/task'
+import {Task, type TaskObject, type TaskStatus} from '../domain/task'
 import {
   type ITaskRepository,
   TaskRepositoryErrorCode,
@@ -8,11 +8,12 @@ import {
 const TASKS_JSON_FILE = 'tasks.json'
 
 export class TaskRepository implements ITaskRepository {
-  private readJsonFile(): Task[] {
-    let tasks: Task[] = []
+  private readJsonFile(): TaskObject[] {
+    let taskObjects: TaskObject[] = []
     try {
-      const file = fs.readFileSync(TASKS_JSON_FILE)
-      tasks = JSON.parse(file.toString())
+      const file = fs.readFileSync(TASKS_JSON_FILE, 'utf-8')
+      taskObjects = JSON.parse(file)
+      console.debug(taskObjects)
     } catch (error: unknown) {
       if (
         error instanceof Error &&
@@ -24,12 +25,12 @@ export class TaskRepository implements ITaskRepository {
       console.error('Error reading JSON file:', error)
       throw new Error(TaskRepositoryErrorCode.INTERNAL_ERROR)
     }
-    return tasks
+    return taskObjects
   }
 
-  private writeJsonFile(tasks: Task[]): void {
+  private writeJsonFile(taskObjects: TaskObject[]): void {
     try {
-      fs.writeFileSync(TASKS_JSON_FILE, JSON.stringify(tasks, null, 2))
+      fs.writeFileSync(TASKS_JSON_FILE, JSON.stringify(taskObjects))
     } catch (error: unknown) {
       console.error('Error writing to JSON file:', error)
       throw new Error(TaskRepositoryErrorCode.FILE_WRITE_ERROR)
@@ -37,48 +38,53 @@ export class TaskRepository implements ITaskRepository {
   }
 
   insert(task: Task): void {
-    let tasks: Task[] = []
+    let taskObjects: TaskObject[] = []
     try {
-      tasks = this.readJsonFile()
+      taskObjects = this.readJsonFile()
     } catch (error: unknown) {
       if (
         error instanceof Error &&
         error.message === TaskRepositoryErrorCode.FILE_NOT_FOUND
       ) {
-        tasks = []
+        taskObjects = []
       } else {
         throw error
       }
     }
-    const existingTask = tasks.find((t) => t.id === task.id)
+    const existingTask = taskObjects.find((t) => t.id === task.id)
     if (existingTask) {
       throw new Error(TaskRepositoryErrorCode.TASK_ALREADY_EXISTS)
     }
-    tasks.push(task)
-    this.writeJsonFile(tasks)
+    taskObjects.push(task.toObject())
+    this.writeJsonFile(taskObjects)
   }
   update(task: Task): void {
-    const tasks = this.readJsonFile()
-    const index = tasks.findIndex((t) => t.id === task.id)
+    const taskObjects = this.readJsonFile()
+    const index = taskObjects.findIndex((t) => t.id === task.id)
     if (index === -1) {
       throw new Error(TaskRepositoryErrorCode.TASK_NOT_FOUND)
     }
-    tasks[index] = task
-    this.writeJsonFile(tasks)
+    taskObjects[index] = task.toObject()
+    this.writeJsonFile(taskObjects)
   }
   delete(task: Task): void {
-    const tasks = this.readJsonFile()
-    const index = tasks.findIndex((t) => t.id === task.id)
+    const taskObjects = this.readJsonFile()
+    const index = taskObjects.findIndex((t) => t.id === task.id)
     if (index === -1) {
       throw new Error(TaskRepositoryErrorCode.TASK_NOT_FOUND)
     }
-    tasks.splice(index, 1)
-    this.writeJsonFile(tasks)
+    taskObjects.splice(index, 1)
+    this.writeJsonFile(taskObjects)
   }
-  list(): Task[] {
+  list(filterByStatus?: TaskStatus): Task[] {
     try {
-      const taskObjs = this.readJsonFile()
-      return taskObjs.map((t) => Task.build(t))
+      const taskObjects = this.readJsonFile()
+      return taskObjects.reduce<Task[]>((tasks, t) => {
+        if (!filterByStatus || t.status === filterByStatus) {
+          tasks.push(Task.build(t))
+        }
+        return tasks
+      }, [])
     } catch (error: unknown) {
       if (
         error instanceof Error &&
@@ -90,9 +96,9 @@ export class TaskRepository implements ITaskRepository {
     }
   }
   find(id: string): Task | undefined {
-    let tasks: Task[] = []
+    let taskObjects: TaskObject[] = []
     try {
-      tasks = this.readJsonFile()
+      taskObjects = this.readJsonFile()
     } catch (error: unknown) {
       if (
         error instanceof Error &&
@@ -102,7 +108,7 @@ export class TaskRepository implements ITaskRepository {
       }
       throw error
     }
-    const taskObj = tasks.find((t) => t.id === id)
+    const taskObj = taskObjects.find((t) => t.id === id)
     if (!taskObj) {
       return undefined
     }
