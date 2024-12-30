@@ -21,7 +21,14 @@ describe('AddTaskUseCase', () => {
     it('calls TaskRepository.add with the correct task name', () => {
       const useCase = new AddTaskUseCase({taskRepository})
       const description = 'Do the laundry'
-      useCase.run(description)
+      const taskObj = useCase.run(description)
+      expect(taskObj).toEqual({
+        id: expect.any(String),
+        description,
+        status: TaskStatus.TODO,
+        createdAt: mockDate.toISOString(),
+        updatedAt: mockDate.toISOString(),
+      })
       expect(taskRepository.insert).toHaveBeenCalledWith({
         id: expect.any(String),
         description,
