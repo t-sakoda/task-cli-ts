@@ -18,7 +18,6 @@ export class TaskRepository implements ITaskRepository {
         error instanceof Error &&
         (error as NodeJS.ErrnoException).code === 'ENOENT'
       ) {
-        console.log('No JSON file found. Creating a new one.')
         throw new Error(TaskRepositoryErrorCode.FILE_NOT_FOUND)
       }
       console.error('Error reading JSON file:', error)
