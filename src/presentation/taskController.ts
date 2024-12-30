@@ -31,7 +31,8 @@ export class TaskController {
         const [description] = args.slice(1)
         const useCase = new AddTaskUseCase({taskRepository})
         try {
-          useCase.run(description)
+          const taskObj = useCase.run(description)
+          console.log(`Task added successfully (ID: ${taskObj.id})`)
         } catch (error: unknown) {
           if (
             error instanceof Error &&
@@ -71,6 +72,7 @@ export class TaskController {
               console.error('Internal error')
           }
         }
+        console.log(`Task updated successfully (ID: ${id})`)
         break
       }
       case 'delete': {
@@ -97,6 +99,7 @@ export class TaskController {
               console.error('Internal error')
           }
         }
+        console.log(`Task deleted successfully (ID: ${id})`)
         break
       }
       case 'mark-in-progress': {
@@ -123,6 +126,7 @@ export class TaskController {
               console.error('Internal error')
           }
         }
+        console.log(`Task marked as in-progress (ID: ${id})`)
         break
       }
       case 'mark-done': {
@@ -149,6 +153,7 @@ export class TaskController {
               console.error('Internal error')
           }
         }
+        console.log(`Task marked as done (ID: ${id})`)
         break
       }
       case 'list': {

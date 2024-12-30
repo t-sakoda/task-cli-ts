@@ -1,4 +1,4 @@
-import {Task} from '../domain/task'
+import {Task, type TaskObject} from '../domain/task'
 import type {ITaskRepository} from '../domain/taskRepository'
 
 export const AddTaskUseCaseErrorCode = {
@@ -19,7 +19,7 @@ export class AddTaskUseCase {
     this.taskRepository = props.taskRepository
   }
 
-  run(description: string) {
+  run(description: string): TaskObject {
     if (!description) {
       throw new Error(AddTaskUseCaseErrorCode.DESCRIPTION_REQUIRED)
     }
@@ -29,5 +29,6 @@ export class AddTaskUseCase {
     } catch (error) {
       throw new Error(AddTaskUseCaseErrorCode.INTERNAL_ERROR)
     }
+    return task.toObject()
   }
 }
